@@ -6,7 +6,9 @@ f = open('prime_numbers 1-100000.txt')
 true_prime_numbers = f.read().split()
 for i in range(len(true_prime_numbers)):
     true_prime_numbers[i] = int(true_prime_numbers[i])
+f.close()
 
+# Генерируем свой массив чисел в заданном диапазоне
 my_prime_numbers = prime_numbers(1, 100000)
 
 # Проверяем на равенство результатов
