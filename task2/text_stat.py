@@ -33,7 +33,7 @@ def text_stat(filename):
         for i in range(len(line) - 1):
             # если вижу конец слова
             if line[i] != ' ' and (line[i + 1] == ' ' or line[i + 1] == '\n'):
-                # увеличиваю кол-во слов, запоминаю индекс, создаю сеты для кириллицы и латиницы
+                # увеличиваю кол-во слов, запоминаю индекс конца слова, создаю int для подстчёта
                 diction['word_amount'] += 1
                 w_end = i
                 k_num = 0
@@ -46,24 +46,26 @@ def text_stat(filename):
                     elif word[k] in kiril:
                         k_num += 1
                     else:
+                        # символ не входит в алфавиты - проверять не нужно
                         continue
 
-                    letter_num += 1
                     diction[word[k]][0] += 1
                     if word[0:k + 1].count(word[k]) == 1:
                         diction[word[k]][1] += 1
-
                 # проверяю на наличие в слове обоих алфавитов
                 if k_num * l_num:
                     diction['bilingual_word_amount'] += 1
                 # обновляю начало слова
                 w_start = w_end + 1
-
-    # Изменяю количество слов с буквой, на соответствующий кортеж
+                # подсчитываю количество букв
+                letter_num += k_num + l_num
+    # Изменяю количеста на кортежы с частотой и долей, на соответствующий кортеж
     if diction['word_amount'] != 0:
         for i in latin + kiril:
+            # округляю до 17 знаков после запятой чтобы обойти особенности дробей в питоне
             diction[i] = (round(diction[i][0] / letter_num, 17), round(diction[i][1] / diction['word_amount'], 17))
     else:
+        # Если файл пустой, то и частота, и доля раны 0.
         for i in latin + kiril:
             diction[i] = (0, 0)
     f.close()
