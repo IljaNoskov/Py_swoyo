@@ -17,4 +17,4 @@ f.close()
 print(roman_and_dec)
 for pair in roman_and_dec:
     assert to_dec(pair[1]) == int(pair[0]), 'Числа не сошлись'
-print('Программа выдаёь верный резальтат на первой тысяче чисел')
+print('Программа выдаёт верный резальтат на первой тысяче чисел')

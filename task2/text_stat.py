@@ -4,7 +4,7 @@ def text_stat(filename):
     try:
         f = open(filename, encoding='utf-8')
     except FileNotFoundError:
-        return {'error': 'Файл с таким именем не найден'}
+        return {'error': 'Файл с таким именем не найден или этот файл не txt'}
     # создаю словарь
     diction = {'word_amount': 0, 'paragraph_amount': 0, 'bilingual_word_amount': 0}
     latin = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
@@ -16,11 +16,9 @@ def text_stat(filename):
              'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'э', 'ю', 'я',
              'ё', 'Ё']
     # заполняю его кириллицей и латиницей (все буквы-ключи имеют значение 0)
-    for i in latin:
-        diction[i] = 0
-    for i in kiril:
-        diction[i] = 0
-
+    for i in latin + kiril:
+        diction[i] = [0, 0]
+    letter_num = 0
     # файл читаю построчно
     for line in f:
         # если строка не пустая, то увеличиваю количество абзацев
@@ -35,36 +33,35 @@ def text_stat(filename):
                 # увеличиваю кол-во слов, запоминаю индекс, создаю сеты для кириллицы и латиницы
                 diction['word_amount'] += 1
                 w_end = i
-                k_word = set()
-                l_word = set()
-                # заново иду по всему слову
-                for k in range(w_start, w_end + 1):
-                    # добавляю кириллицу и латиницу в сеты
-                    if line[k] in latin:
-                        l_word.add(line[k])
-                    elif line[k] in kiril:
-                        k_word.add(line[k])
-                # добавляю из сетов в словарь
-                for k in l_word:
-                    diction[k] += 1
-                for k in k_word:
-                    diction[k] += 1
+                k_num = 0
+                l_num = 0
+                word = line[w_start:w_end]
+
+                for k in range(len(word)):
+                    if word[k] in latin:
+                        l_num += 1
+                    elif word[k] in kiril:
+                        k_num += 1
+                    else:
+                        continue
+
+                    letter_num += 1
+                    diction[word[k]][0] += 1
+                    if word[0:k + 1].count(word[k]) == 1:
+                        diction[word[k]][1] += 1
+
                 # проверяю на наличие в слове обоих алфавитов
-                if len(k_word) * len(l_word):
+                if k_num * l_num:
                     diction['bilingual_word_amount'] += 1
                 # обновляю начало слова
                 w_start = w_end + 1
 
     # Изменяю количество слов с буквой, на соответствующий кортеж
     if diction['word_amount'] != 0:
-        for i in latin:
-            diction[i] = (diction[i], diction[i] / diction['word_amount'])
-        for i in kiril:
-            diction[i] = (diction[i], diction[i] / diction['word_amount'])
+        for i in latin + kiril:
+            diction[i] = (round(diction[i][0] / letter_num, 17), round(diction[i][1] / diction['word_amount'], 17))
     else:
-        for i in latin:
-            diction[i] = (0, 0)
-        for i in kiril:
+        for i in latin + kiril:
             diction[i] = (0, 0)
     f.close()
     return diction
