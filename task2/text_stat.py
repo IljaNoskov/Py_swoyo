@@ -3,8 +3,11 @@ def text_stat(filename):
     # Если такого файла нет, то возвращаю словарь с ошибкой
     try:
         f = open(filename, encoding='utf-8')
+        # Файлы с другим форматом вызывают ошибку при попытке пройтись по строчкам (строка 26)
+        if filename[-4:] != '.txt':
+            return {'error': 'Ошибка чтения файла - он не txt'}
     except FileNotFoundError:
-        return {'error': 'Файл с таким именем не найден или этот файл не txt'}
+        return {'error': 'Файл с таким именем не найден'}
     # создаю словарь
     diction = {'word_amount': 0, 'paragraph_amount': 0, 'bilingual_word_amount': 0}
     latin = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
