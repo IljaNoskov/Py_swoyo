@@ -126,8 +126,8 @@ def text_stat(filename):
     # Изменяю количеста на кортежы с частотой и долей, на соответствующий кортеж
     if diction['word_amount'] != 0:
         for i in latin + kiril:
-            # округляю до 17 знаков после запятой чтобы обойти особенности дробей в питоне
-            diction[i] = (round(diction[i][0] / letter_num, 17), round(diction[i][1] / diction['word_amount'], 17))
+            # считаю доли и округляю до сотых
+            diction[i] = (round(diction[i][0] / letter_num, 2), round(diction[i][1] / diction['word_amount'], 2))
     else:
         # Если файл пустой, то и частота, и доля раны 0.
         for i in latin + kiril:
