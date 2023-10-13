@@ -1,4 +1,4 @@
-from just_number import prime_numbers
+from prime_number import prime_numbers
 
 # Берём из интернета массив простых чисел от 1 до 100000
 # Сайт-источник https://1cov-edu.ru/calc/tablitsa-prostyh-chisel/?n1=1&n2=100000&separator=%20

@@ -4,7 +4,7 @@ def prime_numbers(low, high):
     # учитываем только неотрицательные числа
     if low < 0:
         low = 0
-    # проверяем каждое число из диапазона на простату
+    # проверяем каждое число из диапазона на простоту
     for i in range(low, high + 1):
         if is_prime(i) and i != 1:
             p_list.append(i)
